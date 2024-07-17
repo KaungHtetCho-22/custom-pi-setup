@@ -88,7 +88,7 @@ class USBSoundcardMic(SensorBase):
 
         # Name files by start time and duration
         start_time = time.strftime('%H-%M-%S')
-        filename = f"{self.get_device_id}_{start_time}_dur_{self.record_length}secs"
+        self.current_file = f"{self.get_device_id}_{start_time}_dur_{self.record_length}secs"
 
         # Record for a specific duration
         logging.info('\n{} - Started recording\n'.format(self.current_file))
@@ -105,7 +105,7 @@ class USBSoundcardMic(SensorBase):
             open(ofile + '_ERROR_audio-record-failed', 'a').close()
             time.sleep(1)
 
-        logging.info(f"{filename} - Finished recording")
+        logging.info(f"{self.current_file} - Finished recording")
 
     def postprocess(self):
         """
