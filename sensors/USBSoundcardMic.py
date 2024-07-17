@@ -88,7 +88,7 @@ class USBSoundcardMic(SensorBase):
 
         # Name files by start time and duration
         start_time = time.strftime('%H-%M-%S')
-        filename = f"{self.device_id}_{start_time}_dur_{self.record_length}secs"
+        filename = f"{self.get_device_id}_{start_time}_dur_{self.record_length}secs"
 
         # Record for a specific duration
         logging.info('\n{} - Started recording\n'.format(self.current_file))
