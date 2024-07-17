@@ -61,19 +61,7 @@ class USBSoundcardMic(SensorBase):
             return True
         except:
             raise EnvironmentError
-    
-    def get_device_id():
-        """
-        Retrieve the Raspberry Pi's serial number from /proc/cpuinfo.
-        """
-        try:
-            with open('/proc/cpuinfo', 'r') as f:
-                for line in f:
-                    if line.startswith('Serial'):
-                        return line.strip().split(':')[1].strip()
-        except IOError:
-            return '0000000000000000'  # default in case of error
-    
+
     def capture_data(self, working_dir, upload_dir):
         """
         Method to capture raw audio data from the USB Soundcard Mic
@@ -82,19 +70,19 @@ class USBSoundcardMic(SensorBase):
             working_dir: A working directory to use for file processing
             upload_dir: The directory to write the final data file to for upload.
         """
+
         # populate the working and upload directories
         self.working_dir = working_dir
         self.upload_dir = upload_dir
 
         # Name files by start time and duration
         start_time = time.strftime('%H-%M-%S')
-        self.current_file = f"{self.get_device_id}_{start_time}_dur_{self.record_length}secs"
+        self.current_file = '{}_dur={}secs'.format(start_time, self.record_length)
 
         # Record for a specific duration
         logging.info('\n{} - Started recording\n'.format(self.current_file))
         wfile = os.path.join(self.working_dir, self.working_file)
         ofile = os.path.join(self.working_dir, self.current_file)
-
         try:
             cmd = 'sudo arecord --device hw:1,0 --rate 48000 --format S16_LE --duration {} {}'
             subprocess.call(cmd.format(self.record_length, wfile), shell=True)
@@ -105,7 +93,7 @@ class USBSoundcardMic(SensorBase):
             open(ofile + '_ERROR_audio-record-failed', 'a').close()
             time.sleep(1)
 
-        logging.info(f"{self.current_file} - Finished recording")
+        logging.info('\n{} - Finished recording\n'.format(self.current_file))
 
     def postprocess(self):
         """
