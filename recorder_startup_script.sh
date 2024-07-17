@@ -35,7 +35,7 @@ while true; do
 done
 
 # Change to correct folder
-cd /home/pi/rpi-eco-monitoring
+cd /home/pi/custom-pi-setup
 
 # Update time from internet
 sudo bash ./bash_update_time.sh
@@ -43,17 +43,17 @@ sudo bash ./bash_update_time.sh
 # Start ssh-agent so password not required
 eval $(ssh-agent -s)
 
-# Pull latest code from repo
-last_sha=$(git rev-parse HEAD)
-git fetch origin
-branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
-git reset --hard origin/$branch
-printf 'Pulled from github\n'
-now_sha=$(git rev-parse HEAD)
+# # Pull latest code from repo
+# last_sha=$(git rev-parse HEAD)
+# git fetch origin
+# branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+# git reset --hard origin/$branch
+# printf 'Pulled from github\n'
+# now_sha=$(git rev-parse HEAD)
 
-# Check if this file has changed - reboot if so
-changed_files="$(git diff-tree -r --name-only --no-commit-id $last_sha $now_sha)"
-echo "$changed_files" | grep --quiet "recorder_startup_script" && sudo reboot
+# # Check if this file has changed - reboot if so
+# changed_files="$(git diff-tree -r --name-only --no-commit-id $last_sha $now_sha)"
+# echo "$changed_files" | grep --quiet "recorder_startup_script" && sudo reboot
 
 # Add in current date and time to log files
 currentDate=$(date +"%Y-%m-%d_%H.%M")
